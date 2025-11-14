@@ -55,7 +55,7 @@ function BlogPost() {
     })
   }, [slug])
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return null
   if (!post) return <Navigate to="/" replace />
 
   return (
@@ -97,14 +97,6 @@ function BlogPost() {
                 className="share-button"
               >
                 Twitter
-              </a>
-              <a
-                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="share-button"
-              >
-                LinkedIn
               </a>
             </div>
           </div>
