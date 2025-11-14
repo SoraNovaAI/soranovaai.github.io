@@ -4,8 +4,9 @@ export async function loadBlogPosts() {
   return response.json();
 }
 
-// Load markdown content
+// Load markdown content (without frontmatter)
 export async function loadBlogPost(slug) {
-  const response = await fetch(`/posts/${slug}.md`);
-  return response.text();
+  const response = await fetch('/posts-content.json');
+  const allContent = await response.json();
+  return allContent[slug] || '';
 }

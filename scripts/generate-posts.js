@@ -16,13 +16,14 @@ async function generatePostsIndex() {
     const markdownFiles = files.filter(file => file.endsWith('.md'));
 
     const posts = [];
+    const postsWithContent = {};
 
     for (const file of markdownFiles) {
       const filePath = path.join(POSTS_DIR, file);
       const fileContent = await fs.readFile(filePath, 'utf-8');
 
       // Parse frontmatter
-      const { data } = matter(fileContent);
+      const { data, content } = matter(fileContent);
 
       // Generate slug from filename if not provided
       const slug = data.slug || path.basename(file, '.md');
@@ -45,13 +46,20 @@ async function generatePostsIndex() {
         tags: data.tags || [],
         excerpt: data.excerpt || ''
       });
+
+      // Store content separately
+      postsWithContent[slug] = content;
     }
 
     // Sort posts by date (newest first)
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    // Write to posts.json
+    // Write metadata to posts.json
     await fs.writeFile(OUTPUT_FILE, JSON.stringify(posts, null, 2));
+
+    // Write content map to posts-content.json
+    const contentFile = path.join(__dirname, '../public/posts-content.json');
+    await fs.writeFile(contentFile, JSON.stringify(postsWithContent, null, 2));
 
     console.log(`✅ Generated posts.json with ${posts.length} post(s)`);
     posts.forEach(post => {

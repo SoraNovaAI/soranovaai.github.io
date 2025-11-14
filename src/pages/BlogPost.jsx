@@ -1,8 +1,38 @@
 import { useParams, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { loadBlogPosts, loadBlogPost } from '../data/blogPosts'
 import './BlogPost.css'
+
+function CodeBlock({ children, className }) {
+  const [copied, setCopied] = useState(false)
+  const match = /language-(\w+)/.exec(className || '')
+  const language = match ? match[1] : ''
+  const code = String(children).replace(/\n$/, '')
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="code-block-wrapper">
+      <button onClick={handleCopy} className="copy-button" aria-label="Copy code">
+        {copied ? 'Copied!' : 'Copy'}
+      </button>
+      <SyntaxHighlighter
+        language={language}
+        style={vscDarkPlus}
+        customStyle={{ margin: 0, borderRadius: '0 0 8px 8px' }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
+  )
+}
 
 function BlogPost() {
   const { slug } = useParams()
@@ -19,7 +49,10 @@ function BlogPost() {
       setPost(postMeta)
       setContent(markdown)
       setLoading(false)
-    }).catch(() => setLoading(false))
+    }).catch((error) => {
+      console.error('Error loading post:', error)
+      setLoading(false)
+    })
   }, [slug])
 
   if (loading) return <div>Loading...</div>
@@ -43,7 +76,14 @@ function BlogPost() {
         </header>
 
         <div className="blog-post-content">
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              code: ({ node, inline, ...props }) =>
+                inline ? <code {...props} /> : <CodeBlock {...props} />
+            }}
+          >
+            {content}
+          </ReactMarkdown>
         </div>
 
         <footer className="blog-post-footer">
