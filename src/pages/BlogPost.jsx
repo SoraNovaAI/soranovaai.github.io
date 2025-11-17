@@ -1,6 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { loadBlogPosts, loadBlogPost } from '../data/blogPosts'
@@ -106,6 +107,7 @@ function BlogPost() {
 
         <div className="blog-post-content">
           <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
             components={{
               code: ({ node, inline, ...props }) =>
                 inline ? <code {...props} /> : <CodeBlock {...props} />

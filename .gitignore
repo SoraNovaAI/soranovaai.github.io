@@ -26,6 +26,7 @@ dist-ssr
 # Build output
 build/
 .cache/
+.playwright-mcp
 
 # Environment variables
 .env

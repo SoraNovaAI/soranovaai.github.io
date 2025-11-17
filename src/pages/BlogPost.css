@@ -124,6 +124,47 @@
   text-decoration: underline;
 }
 
+.blog-post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.blog-post-content thead {
+  background-color: var(--surface-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.blog-post-content th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.blog-post-content td {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.blog-post-content tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.blog-post-content tbody tr:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.05);
+}
+
+.blog-post-content strong {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
 .code-block-wrapper {
   position: relative;
   margin: 1.5rem 0;

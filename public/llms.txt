@@ -21,18 +21,18 @@ All blog posts are available in markdown format with the following structure:
 
 ## Topics Covered
 
-- Architecture
-- Backend
-- Microservices
+- Agent Runtime
+- Benchmarks
+- Research
 
 ## Recent Blog Posts
 
-### Building Scalable Microservices with Event-Driven Architecture
-- Published: November 10, 2025
-- Reading time: 8 min read
-- Topics: Architecture, Microservices, Backend
-- Learn how to design and implement scalable microservices using event-driven patterns, message queues, and distributed tracing.
-- URL: /post/building-scalable-microservices
+### Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Research Models
+- Published: November 13, 2025
+- Reading time: 12 min read
+- Topics: Agent Runtime, Benchmarks, Research
+- We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models. Multi-agent was 2x faster and 19x cheaper while producing comparable quality.
+- URL: /post/multi-agent-hypothesis-generation-benchmark
 
 ## All Posts Index
 
