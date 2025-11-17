@@ -10,27 +10,8 @@ npm run dev
 
 ## Adding New Posts
 
-Create a new markdown file in `public/posts/` with YAML frontmatter:
+Create a new markdown file in `public/posts/` using the [post template](./POST_TEMPLATE.md).
 
-**Example:** `public/posts/my-awesome-post.md`
-
-```markdown
----
-title: "My Awesome Post"
-date: "December 1, 2025"
-readTime: "5 min read"
-tags: ["React", "Performance"]
-excerpt: "A brief description of your post that appears in the blog listing"
----
-
-# My Awesome Post
-
-Your content here in markdown...
-
-## Section 1
-
-More content...
-```
 
 The slug is automatically generated from the filename (e.g., `my-awesome-post.md` → slug: `my-awesome-post`).
 
