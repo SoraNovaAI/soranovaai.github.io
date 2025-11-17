@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { loadBlogPosts, loadBlogPost } from '../data/blogPosts'
+import BlogPostStructuredData from '../components/BlogPostStructuredData'
 import './BlogPost.css'
 
 function CodeBlock({ children, className }) {
@@ -59,9 +60,11 @@ function BlogPost() {
   if (!post) return <Navigate to="/" replace />
 
   return (
-    <article className="blog-post">
-      <div className="container blog-post-container">
-        <header className="blog-post-header">
+    <>
+      <BlogPostStructuredData post={post} content={content} />
+      <article className="blog-post">
+        <div className="container blog-post-container">
+          <header className="blog-post-header">
           <h1 className="blog-post-title">{post.title}</h1>
           <div className="blog-post-meta">
             <span className="blog-post-date">{post.date}</span>
@@ -101,8 +104,9 @@ function BlogPost() {
             </div>
           </div>
         </footer>
-      </div>
-    </article>
+        </div>
+      </article>
+    </>
   )
 }
 

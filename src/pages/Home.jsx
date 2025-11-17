@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import BlogCard from '../components/BlogCard'
 import { loadBlogPosts } from '../data/blogPosts'
+import WebsiteStructuredData from '../components/WebsiteStructuredData'
 import './Home.css'
 
 function Home() {
@@ -18,8 +19,10 @@ function Home() {
     : blogPosts
 
   return (
-    <div className="home">
-      <section className="hero">
+    <>
+      <WebsiteStructuredData posts={blogPosts} />
+      <div className="home">
+        <section className="hero">
         <div className="container">
           <h1 className="hero-title">SoraNova Engineering</h1>
           <p className="hero-description">
@@ -55,7 +58,8 @@ function Home() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   )
 }
 
