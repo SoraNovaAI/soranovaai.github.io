@@ -30,6 +30,36 @@
   margin-bottom: 1rem;
 }
 
+.blog-post-author {
+  display: flex;
+  align-items: center;
+}
+
+.author-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.author-link:hover {
+  opacity: 0.7;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+}
+
+.author-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 .separator {
   color: var(--border-color);
 }

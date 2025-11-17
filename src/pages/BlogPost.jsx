@@ -5,6 +5,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { loadBlogPosts, loadBlogPost } from '../data/blogPosts'
 import BlogPostStructuredData from '../components/BlogPostStructuredData'
+import { getGitHubAvatar, getGitHubProfileUrl } from '../utils/github'
 import './BlogPost.css'
 
 function CodeBlock({ children, className }) {
@@ -67,6 +68,31 @@ function BlogPost() {
           <header className="blog-post-header">
           <h1 className="blog-post-title">{post.title}</h1>
           <div className="blog-post-meta">
+            {post.author && (
+              <>
+                <div className="blog-post-author">
+                  {post.author.github && (
+                    <a
+                      href={getGitHubProfileUrl(post.author.github)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="author-link"
+                    >
+                      <img
+                        src={getGitHubAvatar(post.author.github, 40)}
+                        alt={post.author.name}
+                        className="author-avatar"
+                      />
+                      <span className="author-name">{post.author.name}</span>
+                    </a>
+                  )}
+                  {!post.author.github && (
+                    <span className="author-name">{post.author.name}</span>
+                  )}
+                </div>
+                <span className="separator">•</span>
+              </>
+            )}
             <span className="blog-post-date">{post.date}</span>
             <span className="separator">•</span>
             <span className="blog-post-read-time">{post.readTime}</span>

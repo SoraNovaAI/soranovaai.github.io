@@ -44,6 +44,7 @@ async function generatePostsIndex() {
           day: 'numeric'
         }),
         readTime: data.readTime || '5 min read',
+        author: data.author || null,
         tags: data.tags || [],
         excerpt: data.excerpt || ''
       });

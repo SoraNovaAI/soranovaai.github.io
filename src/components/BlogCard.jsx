@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { getGitHubAvatar, getGitHubProfileUrl } from '../utils/github'
 import './BlogCard.css'
 
 function BlogCard({ post }) {
@@ -6,6 +7,24 @@ function BlogCard({ post }) {
     <article className="blog-card">
       <div className="blog-card-content">
         <div className="blog-meta">
+          {post.author && post.author.github && (
+            <>
+              <a
+                href={getGitHubProfileUrl(post.author.github)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="blog-author-link"
+              >
+                <img
+                  src={getGitHubAvatar(post.author.github, 32)}
+                  alt={post.author.name || post.author.github}
+                  className="blog-author-avatar"
+                />
+                <span className="blog-author-name">{post.author.name || post.author.github}</span>
+              </a>
+              <span className="blog-meta-separator">•</span>
+            </>
+          )}
           <span className="blog-date">{post.date}</span>
           <span className="blog-read-time">{post.readTime}</span>
         </div>

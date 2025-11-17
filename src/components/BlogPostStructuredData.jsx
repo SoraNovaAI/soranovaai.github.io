@@ -16,7 +16,12 @@ function BlogPostStructuredData({ post, content }) {
       'description': post.excerpt,
       'datePublished': new Date(post.date).toISOString(),
       'dateModified': new Date(post.date).toISOString(),
-      'author': {
+      'author': post.author && post.author.github ? {
+        '@type': 'Person',
+        'name': post.author.name || post.author.github,
+        'url': `https://github.com/${post.author.github}`,
+        'image': `https://github.com/${post.author.github}.png`
+      } : {
         '@type': 'Organization',
         'name': 'SoraNova',
         'url': 'https://soranovaai.github.io'

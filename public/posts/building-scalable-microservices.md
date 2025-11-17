@@ -2,6 +2,7 @@
 title: "Building Scalable Microservices with Event-Driven Architecture"
 date: "November 10, 2025"
 readTime: "8 min read"
+author: "luarss"
 tags: ["Architecture", "Microservices", "Backend"]
 excerpt: "Learn how to design and implement scalable microservices using event-driven patterns, message queues, and distributed tracing."
 ---
