@@ -1,0 +1,56 @@
+graph TB
+    User[User Query] --> Orchestrator[Research Coordinator<br/>GPT-4.1]
+
+    Orchestrator --> WF[Workflow Engine<br/>MCP Runtime]
+
+    WF --> FA[Factual Research Agent<br/>GPT-4.1]
+    WF --> TA[Technical Analysis Agent<br/>GPT-4.1]
+    WF --> MA[Market Research Agent<br/>GPT-4.1]
+    WF --> TMA[Team Research Agent<br/>GPT-4.1]
+    WF --> RA[Risk Assessment Agent<br/>GPT-4.1]
+
+    FA --> MCP1[MCP: Web Search]
+    TA --> MCP1
+    MA --> MCP1
+    TMA --> MCP1
+    RA --> MCP1
+
+    FA --> MCP2[MCP: Local KB]
+    TA --> MCP2
+    MA --> MCP2
+    TMA --> MCP2
+    RA --> MCP2
+
+    MCP1 --> Exa[Exa Search API]
+    MCP1 --> OpenAI[OpenAI Search]
+    MCP2 --> KB[(Knowledge Base<br/>PostgreSQL + pgvector)]
+
+    FA --> Eval1[DeepEval<br/>Factual Metrics]
+    TA --> Eval2[DeepEval<br/>Technical Metrics]
+    MA --> Eval3[DeepEval<br/>Market Metrics]
+    TMA --> Eval4[DeepEval<br/>Team Metrics]
+    RA --> Eval5[DeepEval<br/>Risk Metrics]
+
+    Eval1 --> Synth[Synthesis Service<br/>GPT-5]
+    Eval2 --> Synth
+    Eval3 --> Synth
+    Eval4 --> Synth
+    Eval5 --> Synth
+
+    Synth --> Citations[Citation Service<br/>GPT-4o-mini]
+    Citations --> Schema[Schema Transform<br/>GPT-5]
+    Schema --> Output[Meeting Prep Document]
+
+    Synth -.-> Logger[Phase Logger]
+    Synth -.-> Tracker[Token Tracker]
+
+    style Orchestrator fill:#e1f5ff
+    style WF fill:#e1f5ff
+    style FA fill:#fff4e1
+    style TA fill:#fff4e1
+    style MA fill:#fff4e1
+    style TMA fill:#fff4e1
+    style RA fill:#fff4e1
+    style Synth fill:#e8f5e9
+    style Schema fill:#e8f5e9
+    style Output fill:#f3e5f5

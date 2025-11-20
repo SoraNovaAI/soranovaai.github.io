@@ -1,0 +1,51 @@
+stateDiagram-v2
+    [*] --> IntentAnalysis
+    IntentAnalysis --> InitialSearch: Research Plan Generated
+
+    InitialSearch --> AgentExecution: Parallel Execution
+
+    state AgentExecution {
+        [*] --> FactualAgent
+        [*] --> TechnicalAgent
+        [*] --> MarketAgent
+        [*] --> TeamAgent
+        [*] --> RiskAgent
+
+        FactualAgent --> AgentResults
+        TechnicalAgent --> AgentResults
+        MarketAgent --> AgentResults
+        TeamAgent --> AgentResults
+        RiskAgent --> AgentResults
+    }
+
+    AgentExecution --> GapAnalysis: Results Collected
+
+    state GapAnalysis {
+        [*] --> CheckCompleteness
+        CheckCompleteness --> IdentifyGaps
+        IdentifyGaps --> CalculateScore
+    }
+
+    GapAnalysis --> Complete: Score ≥ 0.75
+    GapAnalysis --> FollowUpQueries: Score < 0.75
+
+    FollowUpQueries --> AdditionalSearch
+    AdditionalSearch --> AgentExecution: Iteration++
+
+    Complete --> Synthesis
+
+    state Synthesis {
+        [*] --> CombineResults
+        CombineResults --> ExtractCitations
+        ExtractCitations --> DeduplicateCitations
+        DeduplicateCitations --> GenerateReport
+    }
+
+    Synthesis --> SchemaTransform
+    SchemaTransform --> [*]: Meeting Prep Ready
+
+    note right of GapAnalysis
+        Max 5 iterations
+        Typical: 2-3 iterations
+        Each iteration: ~20-30% improvement
+    end note

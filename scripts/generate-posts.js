@@ -2,6 +2,10 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { fileURLToPath } from 'url';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,9 +13,65 @@ const __dirname = path.dirname(__filename);
 const POSTS_DIR = path.join(__dirname, '../public/posts');
 const OUTPUT_FILE = path.join(__dirname, '../public/posts.json');
 const LLMS_TXT_FILE = path.join(__dirname, '../public/llms.txt');
+const MERMAID_CONFIG = path.join(__dirname, 'mermaid-diagrams/mermaid-config.json');
+const PUPPETEER_CONFIG = path.join(__dirname, 'mermaid-diagrams/puppeteer-config.json');
+
+async function generateMermaidDiagrams() {
+  try {
+    console.log('🎨 Generating Mermaid diagrams...');
+
+    // Find all .mmd files in public/images directory
+    const imagesDir = path.join(__dirname, '../public/images');
+    const mmdFiles = [];
+
+    async function findMmdFiles(dir) {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          await findMmdFiles(fullPath);
+        } else if (entry.name.endsWith('.mmd')) {
+          mmdFiles.push(fullPath);
+        }
+      }
+    }
+
+    await findMmdFiles(imagesDir);
+
+    if (mmdFiles.length === 0) {
+      console.log('   ℹ️  No .mmd files found to process');
+      return;
+    }
+
+    // Generate PNG for each .mmd file
+    for (const mmdFile of mmdFiles) {
+      const outputFile = mmdFile.replace('.mmd', '.png');
+      const relativePath = path.relative(path.join(__dirname, '..'), mmdFile);
+
+      try {
+        // Use local mmdc from node_modules
+        const mmdc = path.join(__dirname, '../node_modules/.bin/mmdc');
+        const cmd = `"${mmdc}" -i "${mmdFile}" -o "${outputFile}" -c "${MERMAID_CONFIG}" -b transparent -w 1400 -p "${PUPPETEER_CONFIG}"`;
+        await execAsync(cmd);
+        console.log(`   ✅ Generated ${path.basename(outputFile)} from ${relativePath}`);
+      } catch (error) {
+        console.error(`   ❌ Failed to generate ${path.basename(outputFile)}:`, error.message);
+      }
+    }
+
+    console.log(`✅ Processed ${mmdFiles.length} Mermaid diagram(s)`);
+
+  } catch (error) {
+    console.error('❌ Error generating Mermaid diagrams:', error);
+    // Don't exit on diagram generation failure, continue with post generation
+  }
+}
 
 async function generatePostsIndex() {
   try {
+    // Generate Mermaid diagrams first
+    await generateMermaidDiagrams();
+
     // Read all markdown files from posts directory
     const files = await fs.readdir(POSTS_DIR);
     const markdownFiles = files.filter(file => file.endsWith('.md'));

@@ -27,6 +27,13 @@ All blog posts are available in markdown format with the following structure:
 
 ## Recent Blog Posts
 
+### Building Robust AI Research Agents: A tale of five specialists
+- Published: November 20, 2025
+- Reading time: 22 min read
+- Topics: Agent Runtime, Research
+- Journey through four architectural iterations of building a deep research workflow for VCs - from a single agent to five specialized agents with hierarchical citations, MCP integration, and iterative refinement. Learn what it actually takes to build useful AI systems in 2025.
+- URL: /post/deep-research
+
 ### Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Research Models
 - Published: November 13, 2025
 - Reading time: 12 min read
@@ -36,7 +43,7 @@ All blog posts are available in markdown format with the following structure:
 
 ## All Posts Index
 
-The complete list of 1 blog post is available at:
+The complete list of 2 blog posts is available at:
 /posts.json
 
 Individual posts are located at:
@@ -71,5 +78,5 @@ The blog specializes in:
 All content includes practical code examples, architectural concepts, and actionable insights for software engineers.
 
 ---
-Last updated: 2025-11-17
-Total posts: 1
+Last updated: 2025-11-20
+Total posts: 2

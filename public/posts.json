@@ -1,5 +1,17 @@
 [
   {
+    "slug": "deep-research",
+    "title": "Building Robust AI Research Agents: A tale of five specialists",
+    "date": "November 20, 2025",
+    "readTime": "22 min read",
+    "author": "luarss",
+    "tags": [
+      "Agent Runtime",
+      "Research"
+    ],
+    "excerpt": "Journey through four architectural iterations of building a deep research workflow for VCs - from a single agent to five specialized agents with hierarchical citations, MCP integration, and iterative refinement. Learn what it actually takes to build useful AI systems in 2025."
+  },
+  {
     "slug": "multi-agent-hypothesis-generation-benchmark",
     "title": "Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Research Models",
     "date": "November 13, 2025",
