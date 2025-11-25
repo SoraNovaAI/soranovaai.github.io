@@ -78,5 +78,5 @@ The blog specializes in:
 All content includes practical code examples, architectural concepts, and actionable insights for software engineers.
 
 ---
-Last updated: 2025-11-20
+Last updated: 2025-11-25
 Total posts: 2

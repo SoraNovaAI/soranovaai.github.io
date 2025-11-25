@@ -11,6 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const POSTS_DIR = path.join(__dirname, '../public/posts');
+const DOCS_DIR = path.join(__dirname, '../public/docs');
 const OUTPUT_FILE = path.join(__dirname, '../public/posts.json');
 const LLMS_TXT_FILE = path.join(__dirname, '../public/llms.txt');
 const MERMAID_CONFIG = path.join(__dirname, 'mermaid-diagrams/mermaid-config.json');
@@ -227,4 +228,86 @@ Total posts: ${posts.length}
   }
 }
 
-generatePostsIndex();
+async function generateDocsIndex() {
+  try {
+    // Check if docs directory exists
+    try {
+      await fs.access(DOCS_DIR);
+    } catch {
+      console.log('ℹ️  No docs directory found, skipping docs generation');
+      return;
+    }
+
+    // Get all product directories in docs
+    const productDirs = await fs.readdir(DOCS_DIR, { withFileTypes: true });
+    const products = productDirs.filter(d => d.isDirectory()).map(d => d.name);
+
+    if (products.length === 0) {
+      console.log('ℹ️  No documentation products found');
+      return;
+    }
+
+    for (const product of products) {
+      const productDir = path.join(DOCS_DIR, product);
+      const files = await fs.readdir(productDir);
+      const markdownFiles = files.filter(file => file.endsWith('.md'));
+
+      const docs = [];
+      const docsWithContent = {};
+
+      for (const file of markdownFiles) {
+        const filePath = path.join(productDir, file);
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+
+        // Parse frontmatter
+        const { data, content } = matter(fileContent);
+
+        // Generate slug from filename
+        const slug = path.basename(file, '.md');
+
+        // Validate required fields
+        if (!data.title) {
+          console.warn(`⚠️  Skipping ${file}: missing title in frontmatter`);
+          continue;
+        }
+
+        docs.push({
+          slug,
+          title: data.title,
+          order: data.order || 999,
+          category: data.category || 'General'
+        });
+
+        // Store content separately
+        docsWithContent[slug] = content;
+      }
+
+      // Sort docs by order
+      docs.sort((a, b) => a.order - b.order);
+
+      // Write metadata to docs-{product}.json
+      const docsOutputFile = path.join(__dirname, `../public/docs-${product}.json`);
+      await fs.writeFile(docsOutputFile, JSON.stringify(docs, null, 2));
+
+      // Write content map to docs-{product}-content.json
+      const contentFile = path.join(__dirname, `../public/docs-${product}-content.json`);
+      await fs.writeFile(contentFile, JSON.stringify(docsWithContent, null, 2));
+
+      console.log(`✅ Generated docs-${product}.json with ${docs.length} doc(s)`);
+      docs.forEach(doc => {
+        console.log(`   - [${doc.category}] ${doc.title}`);
+      });
+    }
+
+  } catch (error) {
+    console.error('❌ Error generating docs index:', error);
+    // Don't exit on docs generation failure, continue
+  }
+}
+
+async function main() {
+  await generatePostsIndex();
+  await generateDocsIndex();
+}
+
+main();

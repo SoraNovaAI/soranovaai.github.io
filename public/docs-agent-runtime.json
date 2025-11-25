@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "introduction",
+    "title": "Introduction",
+    "order": 1,
+    "category": "Getting Started"
+  },
+  {
+    "slug": "user-guide",
+    "title": "User Guide",
+    "order": 2,
+    "category": "Getting Started"
+  },
+  {
+    "slug": "agent",
+    "title": "Agent SDK",
+    "order": 3,
+    "category": "Guides"
+  },
+  {
+    "slug": "patterns",
+    "title": "Patterns",
+    "order": 4,
+    "category": "Guides"
+  },
+  {
+    "slug": "context-compaction",
+    "title": "Context Compaction",
+    "order": 5,
+    "category": "Guides"
+  },
+  {
+    "slug": "troubleshooting",
+    "title": "Troubleshooting",
+    "order": 6,
+    "category": "Reference"
+  },
+  {
+    "slug": "examples",
+    "title": "Examples",
+    "order": 7,
+    "category": "Reference"
+  },
+  {
+    "slug": "developer-guide",
+    "title": "Developer Guide",
+    "order": 8,
+    "category": "Reference"
+  }
+]

@@ -12,6 +12,7 @@ function Header() {
         </Link>
         <nav className="nav">
           <Link to="/" className="nav-link">Blog</Link>
+          <Link to="/docs" className="nav-link">Docs</Link>
           <Link to="/about" className="nav-link">About</Link>
           <a href="https://github.com/soranovaai" target="_blank" rel="noopener noreferrer" className="nav-link">
             GitHub
