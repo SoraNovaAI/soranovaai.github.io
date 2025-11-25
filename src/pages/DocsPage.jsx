@@ -10,26 +10,16 @@ import DocsSidebar from '../components/DocsSidebar';
 import './DocsPage.css';
 
 function CodeBlock({ children, className }) {
-  const [copied, setCopied] = useState(false);
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : '';
   const code = String(children).replace(/\n$/, '');
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <div className="code-block-wrapper">
-      <button onClick={handleCopy} className="copy-button" aria-label="Copy code">
-        {copied ? 'Copied!' : 'Copy'}
-      </button>
       <SyntaxHighlighter
         language={language}
         style={vscDarkPlus}
-        customStyle={{ margin: 0, borderRadius: '0 0 8px 8px' }}
+        customStyle={{ margin: 0, borderRadius: '8px' }}
       >
         {code}
       </SyntaxHighlighter>
