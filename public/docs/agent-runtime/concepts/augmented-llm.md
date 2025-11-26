@@ -10,7 +10,7 @@ category: "Concepts"
 
 ## Overview
 
-While `Agent` provides a high-level facade with YAML configuration and evaluation loops, `AugmentedLLM` offers direct control over the execution engine for advanced use cases.
+While `Agent` provides a high-level facade with planning, YAML configuration, and evaluation loops, `AugmentedLLM` offers direct control over the execution engine for advanced use cases.
 
 ### Key Characteristics
 
@@ -18,6 +18,40 @@ While `Agent` provides a high-level facade with YAML configuration and evaluatio
 - **Configuration**: Constructor parameters (programmatic)
 - **Evaluation**: None (Agent layer adds this)
 - **Use Case**: Advanced scenarios requiring fine-grained control
+
+---
+
+## Agent vs AugmentedLLM
+
+| Aspect                 | Agent                           | AugmentedLLM                |
+| ---------------------- | ------------------------------- | --------------------------- |
+| **Configuration**      | YAML-based (`AgentConfig`)      | Constructor params          |
+| **Evaluation**         | Built-in DeepEval loops         | None                        |
+| **API Complexity**     | Simplified facade               | Explicit control            |
+| **Use Case**           | Standard agent patterns         | Advanced/custom workflows   |
+| **Tool Integration**   | Configured via YAML             | Direct `ToolClient`         |
+| **Context Management** | Automatic                       | Manual `RunContext` passing |
+| **Error Handling**     | High-level evaluation feedback  | Low-level retry injection   |
+| **Type Safety**        | Generic `T`, `S_co` (inherited) | Generic `T`, `S_co`         |
+| **Extensibility**      | Limited to config options       | Full control over execution |
+
+### When to Use Each
+
+**Use Agent when:**
+
+- Standard agent workflows with evaluation
+- YAML-based configuration preferred
+- Built-in DeepEval integration needed
+- Simplified API sufficient
+- Rapid prototyping
+
+**Use AugmentedLLM directly when:**
+
+- Building custom agent frameworks
+- Implementing non-standard evaluation loops
+- Requiring fine-grained control over execution
+- Integrating with existing orchestration systems
+- Performance-critical scenarios needing optimization
 
 ### Relationship to Agent
 
@@ -121,15 +155,15 @@ print(f"Compaction history: {context.compaction_history}")
 
 ### RunContext Attributes
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `messages` | list | Conversation history |
-| `estimated_tokens` | int | Estimated token count |
-| `total_tokens` | int | Actual tokens used |
-| `total_prompt_tokens` | int | Prompt tokens used |
-| `total_completion_tokens` | int | Completion tokens used |
-| `compaction_history` | list | Record of compaction events |
-| `err_context` | ErrorContext | Error tracking for retries |
+| Attribute                 | Type         | Description                 |
+| ------------------------- | ------------ | --------------------------- |
+| `messages`                | list         | Conversation history        |
+| `estimated_tokens`        | int          | Estimated token count       |
+| `total_tokens`            | int          | Actual tokens used          |
+| `total_prompt_tokens`     | int          | Prompt tokens used          |
+| `total_completion_tokens` | int          | Completion tokens used      |
+| `compaction_history`      | list         | Record of compaction events |
+| `err_context`             | ErrorContext | Error tracking for retries  |
 
 ## Structured Outputs
 
@@ -180,12 +214,12 @@ llm = AugmentedLLM(
 
 ### Compaction Strategies
 
-| Strategy | Description | Best For |
-|----------|-------------|----------|
-| `greedy` | Removes oldest messages | Fast, no LLM cost |
-| `summarization` | Compresses via LLM | Preserves context |
+| Strategy         | Description             | Best For             |
+| ---------------- | ----------------------- | -------------------- |
+| `greedy`         | Removes oldest messages | Fast, no LLM cost    |
+| `summarization`  | Compresses via LLM      | Preserves context    |
 | `sliding_window` | Keeps recent N messages | Simple conversations |
-| `hybrid` | Combines strategies | Complex scenarios |
+| `hybrid`         | Combines strategies     | Complex scenarios    |
 
 ## Parallel Tool Execution
 
@@ -212,6 +246,7 @@ except RetryBudgetExceeded:
 ```
 
 Error handling flow:
+
 1. Error is captured and injected into conversation
 2. LLM sees error context and can adjust
 3. Exponential backoff between retries
@@ -259,6 +294,7 @@ llm.tear_down()
 ## When to Use AugmentedLLM
 
 **Use AugmentedLLM when:**
+
 - Building custom agent frameworks
 - Implementing non-standard evaluation loops
 - Requiring fine-grained control over execution
@@ -266,6 +302,7 @@ llm.tear_down()
 - Performance-critical scenarios
 
 **Use Agent instead when:**
+
 - Standard agent workflows with evaluation
 - YAML-based configuration preferred
 - Built-in DeepEval integration needed

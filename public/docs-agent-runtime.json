@@ -6,12 +6,6 @@
     "category": "Concepts"
   },
   {
-    "slug": "api-reference",
-    "title": "API Reference",
-    "order": 1,
-    "category": "Reference"
-  },
-  {
     "slug": "developer-guide",
     "title": "Developer Guide",
     "order": 1,
@@ -30,10 +24,16 @@
     "category": "Guides"
   },
   {
-    "slug": "configuration",
-    "title": "Configuration Reference",
-    "order": 2,
+    "slug": "api-reference",
+    "title": "API Reference",
+    "order": 1,
     "category": "Reference"
+  },
+  {
+    "slug": "tools",
+    "title": "Tools",
+    "order": 2,
+    "category": "Concepts"
   },
   {
     "slug": "installation",
@@ -48,16 +48,10 @@
     "category": "Guides"
   },
   {
-    "slug": "tools",
-    "title": "Tools",
+    "slug": "configuration",
+    "title": "Configuration Reference",
     "order": 2,
-    "category": "Concepts"
-  },
-  {
-    "slug": "agent",
-    "title": "Agent SDK",
-    "order": 3,
-    "category": "Guides"
+    "category": "Reference"
   },
   {
     "slug": "augmented-llm",
@@ -72,10 +66,10 @@
     "category": "Reference"
   },
   {
-    "slug": "examples",
-    "title": "Examples",
+    "slug": "workflows",
+    "title": "Workflows",
     "order": 4,
-    "category": "Reference"
+    "category": "Concepts"
   },
   {
     "slug": "mcp-servers",
@@ -84,14 +78,14 @@
     "category": "Guides"
   },
   {
-    "slug": "workflows",
-    "title": "Workflows",
+    "slug": "examples",
+    "title": "Examples",
     "order": 4,
-    "category": "Concepts"
+    "category": "Reference"
   },
   {
-    "slug": "context-compaction",
-    "title": "Context Compaction",
+    "slug": "best-practices",
+    "title": "Best Practices",
     "order": 5,
     "category": "Guides"
   }

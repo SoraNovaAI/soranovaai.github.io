@@ -145,57 +145,26 @@ blocks:
 ```python
 from pathlib import Path
 from agent_runtime.workflow import create_workflow_runner
-from agent_runtime.agent.client import create_llm_client
 from agent_runtime.types.config import Workflow
 
 # Load workflow configuration
 workflow = Workflow.parse_config(Path("workflow.yaml"))
 
-# Create LLM client
-model = create_llm_client(workflow.agent.llm)
-
 # Create and run workflow
-runner = create_workflow_runner(workflow, model, debug=True)
+runner = create_workflow_runner(workflow)
 result = await runner.run("Research the latest AI developments")
 
-# Access results
+# Access results from each block
 for worker_result in result.worker_results:
     print(f"{worker_result.worker_id}: {worker_result.response}")
-
-# Check token usage
-print(f"Total tokens: {result.total_tokens}")
-```
-
-### Accessing Worker Results
-
-```python
-# WorkflowResult contains results from all blocks
-result = await runner.run("Query")
-
-for worker in result.worker_results:
-    print(f"Worker: {worker.worker_id}")
-    print(f"Query: {worker.query}")
-    print(f"Response: {worker.response}")
-    print(f"Tokens: {worker.total_tokens}")
-    print(f"Metadata: {worker.metadata}")
 ```
 
 ## Block Dependencies
 
-In coordinator workflows, the planner creates a DAG with dependencies:
+In coordinator workflows, the planner automatically creates a DAG (Directed Acyclic Graph) with dependencies based on block descriptions. The executor:
 
-```python
-# DAG nodes with dependencies
-nodes = [
-    DAGNode(block_id="data_fetch", depends_on=[]),
-    DAGNode(block_id="analysis", depends_on=["data_fetch"]),
-    DAGNode(block_id="report", depends_on=["analysis"])
-]
-```
-
-The executor:
 1. Identifies blocks with satisfied dependencies
-2. Runs them in parallel
+2. Runs them in parallel where possible
 3. Passes results to dependent blocks
 4. Repeats until all blocks complete
 
@@ -244,86 +213,15 @@ block:
       query: "{input}"
 ```
 
-## Coordinator Architecture
-
-The `CoordinatorWorkflowRunner` uses three internal LLMs:
-
-1. **Planner**: Creates DAG execution plan from available blocks
-2. **Block Executors**: Run individual blocks (created per block)
-3. **Synthesiser**: Combines worker results into final output
-
-```python
-# Internal structure
-class CoordinatorWorkflowRunner:
-    planner: AugmentedLLM      # Creates execution plan
-    synthesiser: AugmentedLLM  # Combines results
-    block_executors: dict      # Block ID → executor function
-```
-
 ## Error Handling
 
-Errors in individual blocks are captured and included in results:
+Failed blocks in a workflow:
 
-```python
-result = await runner.run("Query")
-
-for worker in result.worker_results:
-    if worker.metadata.get("status") == "error":
-        print(f"Block {worker.worker_id} failed:")
-        print(f"  Error: {worker.metadata.get('error')}")
-```
-
-Failed blocks:
 - Return error message as response
 - Are marked complete (to not block dependents)
 - Pass error context to dependent blocks
 
-## Token Tracking
-
-Workflows aggregate token usage across all components:
-
-```python
-result = await runner.run("Query")
-
-print(f"Total prompt tokens: {result.total_prompt_tokens}")
-print(f"Total completion tokens: {result.total_completion_tokens}")
-print(f"Total tokens: {result.total_tokens}")
-
-# Detailed usage history
-for event in result.usage_history:
-    print(f"  {event.model}: {event.total_tokens} tokens")
-```
-
-## Factory Function
-
-Use the factory to create the appropriate runner:
-
-```python
-from agent_runtime.workflow import create_workflow_runner
-
-# Automatically selects runner based on coordination.type
-runner = create_workflow_runner(workflow, model, debug=True)
-```
-
-- `coordination.type: "parallel"` → `CoordinatorWorkflowRunner`
-- `coordination.type: "sequential"` → `SequentialWorkflowRunner`
-
-## Context and State
-
-Access the last execution context:
-
-```python
-runner = create_workflow_runner(workflow, model)
-result = await runner.run("Query")
-
-# Get last context (for debugging)
-context = runner.last_context
-print(f"Messages: {len(context.messages)}")
-
-# For coordinator workflows, get worker messages
-if hasattr(runner, 'get_worker_messages'):
-    messages = runner.get_worker_messages("web_researcher")
-```
+The workflow continues execution even if individual blocks fail, allowing partial results to be collected.
 
 ## Best Practices
 

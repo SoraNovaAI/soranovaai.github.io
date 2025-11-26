@@ -17,7 +17,7 @@ Comprehensive code examples demonstrating Agent Runtime's capabilities for AI ag
 **See Also:**
 
 - [User Guide](/docs/agent-runtime/user-guide) - Complete guide to building with Agent Runtime
-- [Agent SDK](/docs/agent-runtime/agent) - Single-agent SDK guide
+- [Agents](/docs/agent-runtime/agents) - Agent configuration and capabilities
 - [Introduction](/docs/agent-runtime/introduction) - Quick start
 
 ---
@@ -481,7 +481,7 @@ result = await runner.run(query)
 ## Next Steps
 
 - **[User Guide](/docs/agent-runtime/user-guide)** - Complete guide to building with Agent Runtime
-- **[Agent SDK](/docs/agent-runtime/agent)** - Single-agent SDK and configuration
+- **[Agents](/docs/agent-runtime/agents)** - Agent configuration and capabilities
 - **[Context Compaction](/docs/agent-runtime/context-compaction)** - Managing long conversations
 
 ---

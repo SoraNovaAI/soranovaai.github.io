@@ -10,12 +10,7 @@ The `Agent` class is the high-level interface for building AI agents in Agent Ru
 
 ## Overview
 
-Agent Runtime provides two main interfaces:
-
-1. **`Agent`**: High-level facade with YAML configuration and evaluation loops
-2. **`AugmentedLLM`**: Core LLM + tool execution engine with direct control
-
-**Relationship**: `Agent` wraps `AugmentedLLM` and adds YAML-based configuration and evaluation loop integration. For standard agent workflows, use `Agent`. For advanced scenarios requiring fine-grained control, use `AugmentedLLM` directly.
+An **Agent** is an autonomous system that can interpret user queries, plan actions, execute tasks using tools, and evaluate results. It leverages Large Language Models (LLMs) to understand and respond to complex requests.
 
 ## Three-Phase Execution Model
 
@@ -52,27 +47,11 @@ User Query
 
 3. **EVALUATE Phase**: The synthesiser produces the final output. If an evaluator is configured, it assesses quality and can trigger retries with feedback.
 
-## Basic Usage
-
-```python
-import asyncio
-from pathlib import Path
-from agent_runtime import AgentConfig, create_agent
-
-# Load configuration from YAML
-config = AgentConfig.parse_config(Path("agent_config.yaml"))
-
-# Create agent using factory function
-agent = create_agent(config, debug=True)
-
-# Run the agent
-result = asyncio.run(agent.run("Research quantum computing advances"))
-print(result)
-```
+---
 
 ## Configuration
 
-Agents are configured via YAML files:
+### Agent Configuration
 
 ```yaml
 id: "researcher"
@@ -81,20 +60,20 @@ specialization_prompt: |
   You are a research specialist.
   Always cite sources and provide analysis.
 
+capabilities:
+  skills:
+    - "web_search"
+    - "data_analysis"
+
 llm:
   provider: "openai"
   model: "gpt-4"
-  token_budget: 10000
-  compaction:
-    strategy: "summarization"
-    max_context_tokens: 512000
-    target_ratio: 0.8
 
 tools:
-  mode: "all"
-  sources:
+  mode: "all" # or "none" or list of tool names
+  sources: # Optional: specify tool sources to load
     - type: "mcp"
-      mcp_servers: "examples.configs.github.MCP_CONFIG"
+      mcp_servers: "examples.configs.github.MCP_CONFIG" # Python path to MCP config
 
 evaluator:
   type: deepeval
@@ -109,19 +88,46 @@ evaluator:
         criteria: "Evaluate factual accuracy"
 
 on_end:
-  model: "myapp.schemas.OutputModel"
+  model: "myapp.schemas.OutputModel" # Pydantic model path
 ```
 
-See the [Configuration Reference](/docs/agent-runtime/configuration) for complete options.
+**Loading Configuration:**
 
-## Evaluation Loops
+```python
+from pathlib import Path
+from agent_runtime import Agent, AgentConfig
 
-The evaluation system automatically refines responses based on quality criteria:
+config = AgentConfig.parse_config(Path("agent-config.yaml"))
+agent = Agent(config=config)
+result = await agent.run("Research quantum computing")
+```
 
-1. Agent generates a response
-2. Evaluator assesses against configured metrics
-3. If weighted score < threshold: inject feedback and retry
-4. Loop until pass or `max_iteration` reached
+### Tools Configuration
+
+**Access modes:**
+
+```yaml
+tools:
+  mode: "all"  # Access all tools (python + mcp)
+  # OR
+  mode: "python_only"  # Only Python tools
+  # OR
+  mode: "mcp_only"  # Only MCP server tools
+```
+
+**Tool sources** customize behavior:
+
+```yaml
+tools:
+  mode: "all"
+  sources:
+    - type: "mcp"
+      mcp_servers: examples.configs.exa_remote.MCP_CONFIG
+```
+
+### Evaluation Configuration
+
+Define quality criteria with DeepEval:
 
 ```yaml
 evaluator:
@@ -144,9 +150,16 @@ evaluator:
         criteria: "Evaluate data completeness"
 ```
 
-## Structured Outputs
+**How it works:**
 
-Return validated Pydantic models instead of plain text:
+1. Agent generates response
+2. Evaluator assesses against metrics
+3. If weighted score < threshold: inject feedback and retry
+4. Loop until pass or `max_iteration` reached
+
+### Structured Outputs
+
+Return validated Pydantic models:
 
 ```yaml
 on_end:
@@ -168,48 +181,11 @@ result: CompanyData = await agent.run("Research Anthropic")
 print(f"Founded: {result.founded_year}")
 ```
 
-## Context Management
-
-Use `RunContext` to maintain conversation state across multiple runs:
-
-```python
-from agent_runtime.types.context import RunContext
-
-context = RunContext()
-
-# First query
-result1 = await agent.run("What is quantum computing?", context=context)
-
-# Follow-up query (remembers previous context)
-result2 = await agent.run("How does it relate to cryptography?", context=context)
-
-# Check token usage
-print(f"Total tokens used: {context.total_tokens}")
-```
-
-## When to Use Agent vs AugmentedLLM
-
-| Aspect | Agent | AugmentedLLM |
-| ------ | ----- | ------------ |
-| **Configuration** | YAML-based | Constructor params |
-| **Evaluation** | Built-in DeepEval loops | None |
-| **API Complexity** | Simplified facade | Explicit control |
-| **Use Case** | Standard agent patterns | Advanced/custom workflows |
-
-**Use Agent when:**
-- Standard agent workflows with evaluation
-- YAML-based configuration preferred
-- Built-in DeepEval integration needed
-- Rapid prototyping
-
-**Use AugmentedLLM when:**
-- Building custom agent frameworks
-- Implementing non-standard evaluation loops
-- Requiring fine-grained control over execution
-- Performance-critical scenarios
+---
 
 ## Next Steps
 
 - [Tools](/docs/agent-runtime/tools) - Learn about tool integration
-- [AugmentedLLM](/docs/agent-runtime/augmented-llm) - Low-level execution engine
 - [Configuration Reference](/docs/agent-runtime/configuration) - Complete YAML options
+- [Examples](/docs/agent-runtime/examples) - Usage patterns
+- [AugmentedLLM](/docs/agent-runtime/augmented-llm) - Low-level execution engine (Advanced users only)
