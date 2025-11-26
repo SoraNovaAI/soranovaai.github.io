@@ -143,6 +143,57 @@ async function generateLlmsTxt(posts) {
     // Collect all unique tags
     const allTags = [...new Set(posts.flatMap(post => post.tags))].sort();
 
+    // Load documentation products if they exist
+    let docsSection = '';
+    try {
+      const publicDir = path.join(__dirname, '../public');
+      const files = await fs.readdir(publicDir);
+      const docsJsonFiles = files.filter(f => f.startsWith('docs-') && f.endsWith('.json') && !f.includes('-content'));
+
+      if (docsJsonFiles.length > 0) {
+        docsSection = '\n## Documentation\n\n';
+        docsSection += 'Comprehensive documentation is available for the following products:\n\n';
+
+        for (const docsFile of docsJsonFiles) {
+          const productName = docsFile.replace('docs-', '').replace('.json', '');
+          const docsPath = path.join(publicDir, docsFile);
+          const docsContent = JSON.parse(await fs.readFile(docsPath, 'utf-8'));
+
+          // Group docs by category
+          const categories = {};
+          docsContent.forEach(doc => {
+            if (!categories[doc.category]) {
+              categories[doc.category] = [];
+            }
+            categories[doc.category].push(doc);
+          });
+
+          // Format product name (e.g., "agent-runtime" -> "Agent Runtime")
+          const displayName = productName.split('-').map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ');
+
+          docsSection += `### ${displayName}\n\n`;
+          docsSection += `${docsContent.length} documentation page${docsContent.length !== 1 ? 's' : ''} organized into ${Object.keys(categories).length} categor${Object.keys(categories).length !== 1 ? 'ies' : 'y'}:\n\n`;
+
+          // List categories and their docs
+          Object.keys(categories).sort().forEach(category => {
+            docsSection += `**${category}**\n`;
+            categories[category].forEach(doc => {
+              docsSection += `- ${doc.title}\n`;
+            });
+            docsSection += '\n';
+          });
+
+          docsSection += `Documentation index: /docs-${productName}.json\n`;
+          docsSection += `Individual docs: /docs/${productName}/{slug}.md\n\n`;
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️  Could not load documentation for llms.txt:', error.message);
+      // Continue without docs section
+    }
+
     // Build llms.txt content
     const llmsTxt = `# SoraNova Engineering Blog
 
@@ -185,7 +236,7 @@ The complete list of ${posts.length} blog post${posts.length !== 1 ? 's' : ''} i
 
 Individual posts are located at:
 /posts/{slug}.md
-
+${docsSection}
 ## Navigation
 
 - Home: /

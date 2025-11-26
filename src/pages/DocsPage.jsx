@@ -7,6 +7,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { loadDocPages, loadDocPage, getDocBySlug } from '../data/docPages';
 import { getPrevNextDocs, DOCS_PRODUCTS } from '../data/docsNav';
 import DocsSidebar from '../components/DocsSidebar';
+import DocsStructuredData from '../components/DocsStructuredData';
 import './DocsPage.css';
 
 function slugify(text) {
@@ -65,6 +66,7 @@ function DocsPage() {
 
   return (
     <div className="docs-layout">
+      <DocsStructuredData doc={doc} product={{ key: product, ...productInfo }} content={content} />
       <DocsSidebar product={product} docs={docs} />
 
       <main className="docs-main">

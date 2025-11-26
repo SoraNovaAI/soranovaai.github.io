@@ -1,15 +1,15 @@
-import { useEffect } from 'react'
+import { useMemo } from 'react'
+import StructuredData from './StructuredData'
 
 /**
  * Generates JSON-LD structured data for blog posts
  * Helps search engines and AI understand the content
  */
 function BlogPostStructuredData({ post, content }) {
-  useEffect(() => {
-    if (!post) return
+  const data = useMemo(() => {
+    if (!post) return null
 
-    // Create structured data
-    const structuredData = {
+    return {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
       'headline': post.title,
@@ -45,39 +45,19 @@ function BlogPostStructuredData({ post, content }) {
       'timeRequired': post.readTime,
       'inLanguage': 'en-US'
     }
-
-    // Create or update script tag
-    let scriptTag = document.getElementById('blog-post-structured-data')
-
-    if (!scriptTag) {
-      scriptTag = document.createElement('script')
-      scriptTag.id = 'blog-post-structured-data'
-      scriptTag.type = 'application/ld+json'
-      document.head.appendChild(scriptTag)
-    }
-
-    scriptTag.textContent = JSON.stringify(structuredData, null, 2)
-
-    // Update page title and meta description
-    document.title = `${post.title} | SoraNova Tech Blog`
-
-    let metaDescription = document.querySelector('meta[name="description"]')
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta')
-      metaDescription.name = 'description'
-      document.head.appendChild(metaDescription)
-    }
-    metaDescription.content = post.excerpt
-
-    // Cleanup on unmount
-    return () => {
-      if (scriptTag && scriptTag.parentNode) {
-        scriptTag.parentNode.removeChild(scriptTag)
-      }
-    }
   }, [post, content])
 
-  return null // This component doesn't render anything
+  const meta = useMemo(() => {
+    if (!post) return {}
+    return {
+      title: `${post.title} | SoraNova Tech Blog`,
+      description: post.excerpt
+    }
+  }, [post])
+
+  if (!post) return null
+
+  return <StructuredData data={data} id="blog-post-structured-data" meta={meta} />
 }
 
 export default BlogPostStructuredData

@@ -49,6 +49,43 @@ The complete list of 2 blog posts is available at:
 Individual posts are located at:
 /posts/{slug}.md
 
+## Documentation
+
+Comprehensive documentation is available for the following products:
+
+### Agent Runtime
+
+15 documentation pages organized into 5 categories:
+
+**Concepts**
+- Agents
+- Tools
+- AugmentedLLM
+- Workflows
+
+**Contributing**
+- Developer Guide
+
+**Getting Started**
+- Introduction
+- Installation
+
+**Guides**
+- User Guide
+- Patterns
+- MCP Servers
+- Best Practices
+
+**Reference**
+- API Reference
+- Configuration Reference
+- Troubleshooting
+- Examples
+
+Documentation index: /docs-agent-runtime.json
+Individual docs: /docs/agent-runtime/{slug}.md
+
+
 ## Navigation
 
 - Home: /
