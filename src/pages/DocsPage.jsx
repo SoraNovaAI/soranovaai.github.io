@@ -76,8 +76,16 @@ function DocsPage() {
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                code: ({ node, inline, ...props }) =>
-                  inline ? <code {...props} /> : <CodeBlock {...props} />
+                pre: ({ children }) => {
+                  const codeElement = children?.props;
+                  if (codeElement) {
+                    return <CodeBlock className={codeElement.className}>{codeElement.children}</CodeBlock>;
+                  }
+                  return <pre>{children}</pre>;
+                },
+                code: ({ children, className, ...props }) => (
+                  <code className={className} {...props}>{children}</code>
+                )
               }}
             >
               {content}
