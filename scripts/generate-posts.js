@@ -228,6 +228,23 @@ Total posts: ${posts.length}
   }
 }
 
+async function findMarkdownFiles(dir) {
+  const markdownFiles = [];
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const nestedFiles = await findMarkdownFiles(fullPath);
+      markdownFiles.push(...nestedFiles);
+    } else if (entry.name.endsWith('.md')) {
+      markdownFiles.push(fullPath);
+    }
+  }
+
+  return markdownFiles;
+}
+
 async function generateDocsIndex() {
   try {
     // Check if docs directory exists
@@ -249,25 +266,23 @@ async function generateDocsIndex() {
 
     for (const product of products) {
       const productDir = path.join(DOCS_DIR, product);
-      const files = await fs.readdir(productDir);
-      const markdownFiles = files.filter(file => file.endsWith('.md'));
+      const markdownFiles = await findMarkdownFiles(productDir);
 
       const docs = [];
       const docsWithContent = {};
 
-      for (const file of markdownFiles) {
-        const filePath = path.join(productDir, file);
+      for (const filePath of markdownFiles) {
         const fileContent = await fs.readFile(filePath, 'utf-8');
 
         // Parse frontmatter
         const { data, content } = matter(fileContent);
 
         // Generate slug from filename
-        const slug = path.basename(file, '.md');
+        const slug = path.basename(filePath, '.md');
 
         // Validate required fields
         if (!data.title) {
-          console.warn(`⚠️  Skipping ${file}: missing title in frontmatter`);
+          console.warn(`⚠️  Skipping ${path.basename(filePath)}: missing title in frontmatter`);
           continue;
         }
 
