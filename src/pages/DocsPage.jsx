@@ -9,6 +9,13 @@ import { getPrevNextDocs, DOCS_PRODUCTS } from '../data/docsNav';
 import DocsSidebar from '../components/DocsSidebar';
 import './DocsPage.css';
 
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 function CodeBlock({ children, className }) {
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : '';
@@ -76,6 +83,10 @@ function DocsPage() {
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
+                h1: ({ children }) => <h1 id={slugify(String(children))}>{children}</h1>,
+                h2: ({ children }) => <h2 id={slugify(String(children))}>{children}</h2>,
+                h3: ({ children }) => <h3 id={slugify(String(children))}>{children}</h3>,
+                h4: ({ children }) => <h4 id={slugify(String(children))}>{children}</h4>,
                 pre: ({ children }) => {
                   const codeElement = children?.props;
                   if (codeElement) {
