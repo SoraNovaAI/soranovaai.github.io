@@ -1,0 +1,92 @@
+[
+  {
+    "slug": "agents",
+    "title": "Agents",
+    "order": 1,
+    "category": "Concepts"
+  },
+  {
+    "slug": "developer-guide",
+    "title": "Developer Guide",
+    "order": 1,
+    "category": "Contributing"
+  },
+  {
+    "slug": "introduction",
+    "title": "Introduction",
+    "order": 1,
+    "category": "Getting Started"
+  },
+  {
+    "slug": "user-guide",
+    "title": "User Guide",
+    "order": 1,
+    "category": "Guides"
+  },
+  {
+    "slug": "api-reference",
+    "title": "API Reference",
+    "order": 1,
+    "category": "Reference"
+  },
+  {
+    "slug": "tools",
+    "title": "Tools",
+    "order": 2,
+    "category": "Concepts"
+  },
+  {
+    "slug": "installation",
+    "title": "Installation",
+    "order": 2,
+    "category": "Getting Started"
+  },
+  {
+    "slug": "patterns",
+    "title": "Patterns",
+    "order": 2,
+    "category": "Guides"
+  },
+  {
+    "slug": "configuration",
+    "title": "Configuration Reference",
+    "order": 2,
+    "category": "Reference"
+  },
+  {
+    "slug": "augmented-llm",
+    "title": "AugmentedLLM",
+    "order": 3,
+    "category": "Concepts"
+  },
+  {
+    "slug": "troubleshooting",
+    "title": "Troubleshooting",
+    "order": 3,
+    "category": "Reference"
+  },
+  {
+    "slug": "workflows",
+    "title": "Workflows",
+    "order": 4,
+    "category": "Concepts"
+  },
+  {
+    "slug": "mcp-servers",
+    "title": "MCP Servers",
+    "order": 4,
+    "category": "Guides"
+  },
+  {
+    "slug": "examples",
+    "title": "Examples",
+    "order": 4,
+    "category": "Reference"
+  },
+  {
+    "slug": "best-practices",
+    "title": "Best Practices",
+    "order": 5,
+    "category": "Guides"
+  }
+]
