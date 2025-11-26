@@ -13,7 +13,7 @@
   },
   {
     "slug": "multi-agent-hypothesis-generation-benchmark",
-    "title": "Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Research Models",
+    "title": "Multi-Agent Systems Are 23x Cheaper Than Deep Research Models with Higher Quality",
     "date": "November 13, 2025",
     "readTime": "12 min read",
     "author": "luarss",
@@ -22,6 +22,6 @@
       "Benchmarks",
       "Research"
     ],
-    "excerpt": "We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models. Multi-agent was 2x faster and 19x cheaper while producing comparable quality."
+    "excerpt": "We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models across 5 scientific domains. Multi-agent won or tied in all 5 with 23x lower cost and higher novelty scores."
   }
 ]

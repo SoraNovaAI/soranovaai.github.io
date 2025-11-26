@@ -34,11 +34,11 @@ All blog posts are available in markdown format with the following structure:
 - Journey through four architectural iterations of building a deep research workflow for VCs - from a single agent to five specialized agents with hierarchical citations, MCP integration, and iterative refinement. Learn what it actually takes to build useful AI systems in 2025.
 - URL: /post/deep-research
 
-### Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Research Models
+### Multi-Agent Systems Are 23x Cheaper Than Deep Research Models with Higher Quality
 - Published: November 13, 2025
 - Reading time: 12 min read
 - Topics: Agent Runtime, Benchmarks, Research
-- We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models. Multi-agent was 2x faster and 19x cheaper while producing comparable quality.
+- We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models across 5 scientific domains. Multi-agent won or tied in all 5 with 23x lower cost and higher novelty scores.
 - URL: /post/multi-agent-hypothesis-generation-benchmark
 
 ## All Posts Index

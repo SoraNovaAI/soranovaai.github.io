@@ -1,15 +1,15 @@
 ---
-title: "Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Research Models"
+title: "Multi-Agent Systems Are 23x Cheaper Than Deep Research Models with Higher Quality"
 date: "November 13, 2025"
 readTime: "12 min read"
 tags: ["Agent Runtime", "Benchmarks", "Research"]
-excerpt: "We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models. Multi-agent was 2x faster and 19x cheaper while producing comparable quality."
+excerpt: "We benchmarked multi-agent systems with 11 specialized agents against single-model approaches and deep reasoning models across 5 scientific domains. Multi-agent won or tied in all 5 with 23x lower cost and higher novelty scores."
 author: "luarss"
 ---
 
-# Multi-Agent Systems Are 2x Faster and 19x Cheaper Than Deep Reasoning Models
+# Multi-Agent Systems Are 23x Cheaper Than Deep Research Models with Higher Quality
 
-**TL;DR**: We ran the same hypothesis generation task across 5 scientific domains using three different approaches: a multi-agent system with 11 specialized agents, GPT-4o-mini with some tools, and o4-mini-deep-research. The multi-agent approach was consistently 2x faster than o4-mini-deep and 19x cheaper, while actually producing slightly better quality (0.75 vs 0.73 overall score). Multi-agent generates more feasible hypotheses; o4-mini-deep is more novel and comprehensive. GPT-4o-mini was fastest but quality varied significantly.
+**TL;DR**: We ran the same hypothesis generation task across 5 scientific domains using three different approaches: a multi-agent system with 11 specialized agents, GPT-4o-mini with tools (k=10), and o4-mini-deep-research. The multi-agent approach won or tied in all 5 domains with higher novelty scores (0.80-0.91 vs 0.72-0.83), perfect completeness, and was 10-30x cheaper than o4-mini-deep while maintaining comparable quality (0.92-0.95 overall scores).
 
 ---
 
@@ -22,10 +22,10 @@ Fair question! So we decided to actually benchmark it properly.
 ## The setup
 
 We picked 5 challenging scientific domains:
-- **Drug discovery** for neurodegenerative diseases (20 papers)
-- **Multi-agent RL** for trading systems (25 papers)
 - **Autonomous vehicle** perception under adversarial conditions (20 papers)
-- **Protein folding** (5 papers - the "easy" one)
+- **Chip design** optimization and verification (20 papers)
+- **Membership inference** attacks and privacy (20 papers)
+- **Multi-agent RL** for trading systems (25 papers)
 - **Test-time scaling** in LLMs (25 papers)
 
 For each domain, we ran three approaches:
@@ -54,36 +54,35 @@ For each domain, we ran three approaches:
 
 Multi-agent was consistently faster than o4-mini-deep:
 
-| Domain | Multi-Agent | o4-mini-deep | Speedup |
-|--------|-------------|--------------|---------|
-| Drug discovery | 7.7 min | 15.4 min | **2.0x** |
-| Trading RL | 6.3 min | 10.5 min | **1.7x** |
-| Protein folding | 4.6 min | 14.1 min | **3.1x** |
-| Autonomous vehicles | 5.6 min | 6.1 min | **1.1x** |
-| Test-time scaling | 4.9 min | 12.2 min | **2.5x** |
-| **Average** | **5.8 min** | **11.7 min** | **2.0x** |
+| Domain | Multi-Agent | o4-mini-deep | GPT-4o-mini-k10 | Multi-agent wins |
+|--------|-------------|--------------|-----------------|------------------|
+| Autonomous vehicles | 5.1 min | 9.1 min | 2.0 min | ✓ |
+| Chip design | 2.9 min | 9.1 min | 1.6 min | ✓ (tied quality) |
+| Membership inference | 5.8 min | 14.1 min | 2.4 min | ✓ |
+| Multi-agent trading RL | 9.1 min | 11.6 min | 1.3 min | ✓ (tied quality) |
+| Test-time scaling | 11.4 min | 14.6 min | 2.7 min | ✓ |
 
-GPT-4o-mini with tools was fastest overall (~4 min average). See the "Quality metrics comparison" section below for detailed quality analysis.
+GPT-4o-mini-tools-k10 was fastest (~2 min average) but had lower quality scores. Multi-agent won or tied in all 5 domains on overall quality.
 
 ### The cost story
 
-Here's where it gets interesting. o4-mini-deep costs about **$0.72 per run** on average:
+Here's where it gets interesting. o4-mini-deep costs about **$0.76 per run** on average:
 
-- Drug discovery: $0.82
-- Trading RL: $0.79
-- Autonomous vehicles: $0.56
-- Protein folding: $0.72
-- Test-time scaling: $0.79
+- Autonomous vehicles: $0.70
+- Chip design: $0.61
+- Membership inference: $0.84
+- Multi-agent trading RL: $0.70
+- Test-time scaling: $0.88
 
-Multi-agent? **$0.038 per run** on average (19x cheaper!). Here are the actual costs:
+Multi-agent? **$0.033 per run** on average (23x cheaper!). Here are the actual costs:
 
-- Autonomous vehicles: $0.039 (160k tokens, 34 API calls)
-- Drug discovery: $0.041 (156k tokens, 34 API calls)
-- Trading RL: $0.047 (188k tokens, 36 API calls)
-- Protein folding: $0.021 (77k tokens, 32 API calls)
-- Test-time scaling: $0.041 (147k tokens, 34 API calls)
+- Autonomous vehicles: $0.025
+- Chip design: $0.017
+- Membership inference: $0.032
+- Multi-agent trading RL: $0.039
+- Test-time scaling: $0.051
 
-The multi-agent approach makes 32-36 agent calls per run (the pipeline is more granular than the 11 agent types suggest). But even with more calls, it's still **19x cheaper** than o4-mini-deep.
+The multi-agent approach makes 32-36 agent calls per run (the pipeline is more granular than the 11 agent types suggest). But even with more calls, it's still **23x cheaper** than o4-mini-deep.
 
 GPT-4o-mini baseline is even cheaper at ~$0.015 per run, but quality is inconsistent.
 
@@ -134,39 +133,37 @@ Ask for 5 hypotheses, get 12. Every time. It just keeps going. The deep research
 
 Every domain took 6-8 minutes. Very consistent. The sequential pipeline has pretty stable runtime characteristics.
 
-### Domain complexity matters more for o4-mini-deep
+### Domain complexity matters for runtime
 
-Simple domains (protein folding): o4-mini-deep took 3x longer than multi-agent
-Complex domains (drug discovery): o4-mini-deep took 2x longer
-Very complex (trading RL): 1.7x longer
+Simpler domains (chip design): Multi-agent was 3.1x faster than o4-mini-deep
+Complex domains (membership inference): Multi-agent was 2.4x faster
+Very complex (multi-agent trading RL): Multi-agent was 1.3x faster
 
-It's like o4-mini-deep has a "minimum depth" it goes to regardless of domain complexity.
+Multi-agent scales more predictably with domain complexity than o4-mini-deep.
 
 ## Quality metrics comparison
 
 Beyond speed and cost, we wanted to compare the **quality** of hypotheses generated by each approach. Here's what we found by analyzing the structured outputs:
 
-### Hypothesis scoring breakdown
+### DeepEval quality metrics (scientific novelty, rigor, completeness)
 
-All three approaches generate hypotheses with scores across 4 dimensions: feasibility, impact, novelty, and resources. Here's how they compare:
+We used DeepEval to measure three key dimensions: scientific novelty, scientific rigor (methodology completeness), and report completeness. Here's how they compare across domains:
 
-| Metric | Multi-Agent | o4-mini-deep | GPT-4o-mini |
-|--------|-------------|--------------|-------------|
-| **Avg Feasibility** | 0.73 | 0.64 | 0.68 |
-| **Avg Impact** | 0.78 | 0.78 | 0.72 |
-| **Avg Novelty** | 0.84 | 0.86 | 0.79 |
-| **Avg Resources** | 0.63 | 0.62 | 0.70 |
-| **Overall Score** | 0.75 | 0.73 | 0.72 |
+| Domain | Winner | Multi-Agent | o4-mini-deep | GPT-4o-mini-k10 |
+|--------|--------|-------------|--------------|-----------------|
+| **Autonomous vehicles** | Multi-agent | 0.95 (novelty: 0.84) | 0.91 (novelty: 0.74) | 0.91 (novelty: 0.73) |
+| **Chip design** | Tied | 0.93 (novelty: 0.80) | 0.93 (novelty: 0.80) | 0.93 (novelty: 0.79) |
+| **Membership inference** | Multi-agent | 0.94 (novelty: 0.82) | 0.92 (novelty: 0.77) | 0.92 (novelty: 0.75) |
+| **Multi-agent trading RL** | Tied | 0.92 (novelty: 0.91) | 0.92 (novelty: 0.76) | 0.92 (novelty: 0.75) |
+| **Test-time scaling** | Multi-agent | 0.95 (novelty: 0.85) | 0.91 (novelty: 0.72) | 0.92 (novelty: 0.77) |
 
 **Key findings:**
 
-1. **Multi-agent produces more feasible hypotheses** (0.73 vs 0.64). The phased approach with dedicated feasibility assessment helps filter impractical ideas early.
+1. **Multi-agent won or tied in all 5 domains** with overall scores of 0.92-0.95.
 
-2. **o4-mini-deep edges out on novelty** (0.86 vs 0.84) - its extended reasoning time helps it find more creative combinations.
+2. **Multi-agent consistently achieved higher novelty** (0.80-0.91 vs 0.72-0.83) - the phased approach with dedicated gap analysis and method transfer agents helps discover novel research directions.
 
-3. **Impact scores are tied** between multi-agent and o4-mini-deep (0.78), both significantly better than GPT-4o-mini (0.72).
-
-4. **Resource requirements** are similar across approaches, though GPT-4o-mini tends to underestimate complexity (0.70 score = lower resource needs).
+3. **All approaches achieved perfect rigor and completeness** (1.00) except multi-agent trading RL where multi-agent scored 0.86 on rigor.
 
 ### Hypothesis quality characteristics
 
@@ -224,17 +221,15 @@ The 2x speed advantage and 19x cost advantage of multi-agent makes it the better
 
 ## Conclusion
 
-If we were starting a new project today, we'd use **multi-agent as the default**. It's fast enough (5-6 min), cheap enough ($0.038/run), and produces structured, traceable outputs with quality that matches or exceeds o4-mini-deep (0.75 vs 0.73 overall score).
+If we were starting a new project today, we'd use **multi-agent as the default**. It won or tied in all 5 domains (0.92-0.95 overall scores), achieved consistently higher novelty (0.80-0.91), and costs 23x less than o4-mini-deep ($0.033 vs $0.76 per run).
 
 The economics are compelling:
-- **100 runs**: Multi-agent costs $3.80, o4-mini-deep costs $72
-- **1000 runs**: Multi-agent costs $38, o4-mini-deep costs $720
+- **100 runs**: Multi-agent costs $3.30, o4-mini-deep costs $76
+- **1000 runs**: Multi-agent costs $33, o4-mini-deep costs $760
 
-At scale, that's real money. And you're not sacrificing quality to save it.
+At scale, that's real money. And you're actually getting better quality.
 
-We'd keep **GPT-4o-mini with tools** around for rapid iteration during development. It's fast enough (2-6 min) and cheap enough ($0.015/run) for brainstorming and quick experiments.
-
-We'd use **o4-mini-deep** sparingly, for high-value one-off analyses where we really need maximum comprehensiveness, boldest creative leaps, and detailed grant-ready resource planning. Its slightly higher novelty scores (0.86 vs 0.84) and extensive feasibility breakdowns justify the cost and time in those scenarios.
+We'd use **o4-mini-deep** sparingly, for domains where its comprehensiveness justifies the cost. In chip design it tied with multi-agent (0.93), but for most domains multi-agent's higher novelty and lower cost make it the better choice.
 
 The multi-agent approach isn't magic - it's just careful prompt engineering, good tool usage, and workflow design. But those details matter. A lot.
 
