@@ -1,7 +1,7 @@
 ---
 title: "User Guide"
-order: 2
-category: "Getting Started"
+order: 1
+category: "Guides"
 ---
 
 # Agent Runtime User Guide

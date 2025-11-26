@@ -1,7 +1,7 @@
 ---
 title: "Developer Guide"
-order: 8
-category: "Reference"
+order: 1
+category: "Contributing"
 ---
 
 # Agent Runtime Developer Guide

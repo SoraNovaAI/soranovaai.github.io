@@ -1,6 +1,6 @@
 ---
 title: "Patterns"
-order: 4
+order: 2
 category: "Guides"
 ---
 

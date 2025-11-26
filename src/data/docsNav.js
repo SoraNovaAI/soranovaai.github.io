@@ -21,8 +21,10 @@ export const DOCS_PRODUCTS = {
 export const CATEGORY_ORDER = {
   'agent-runtime': [
     'Getting Started',
+    'Concepts',
     'Guides',
-    'Reference'
+    'Reference',
+    'Contributing'
   ]
 };
 

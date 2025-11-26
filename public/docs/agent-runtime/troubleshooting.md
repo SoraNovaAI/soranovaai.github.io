@@ -1,6 +1,6 @@
 ---
 title: "Troubleshooting"
-order: 6
+order: 3
 category: "Reference"
 ---
 

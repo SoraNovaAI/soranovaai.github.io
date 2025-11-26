@@ -111,6 +111,8 @@ Agent Runtime provides a layered architecture for building AI agents:
 
 ## Next Steps
 
+- [Installation](/docs/agent-runtime/installation) - Detailed setup instructions
+- [Agents](/docs/agent-runtime/agents) - Understanding the Agent class
+- [Tools](/docs/agent-runtime/tools) - Tool integration guide
 - [User Guide](/docs/agent-runtime/user-guide) - Complete guide to building agents
-- [Patterns](/docs/agent-runtime/patterns) - Common patterns and best practices
 - [Examples](/docs/agent-runtime/examples) - Code examples and use cases
